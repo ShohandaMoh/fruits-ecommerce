@@ -19,11 +19,13 @@ public class JwtUtil {
 
     private final SecretKey SECRET_KEY;
 
-    private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
+    private final long EXPIRATION_TIME;
 
-    public JwtUtil(@Value("${jwt.secret}") String secret) {
+    public JwtUtil(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") long expirationTime) {
         this.SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes());
+        this.EXPIRATION_TIME = expirationTime;
     }
+
     public String extractUsername(String token) {
         return extractClaims(token).getSubject();
     }

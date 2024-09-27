@@ -6,6 +6,7 @@ import com.project.fruits_ecommerce.entities.User;
 import com.project.fruits_ecommerce.repository.RoleRepository;
 import com.project.fruits_ecommerce.repository.UserRepository;
 import com.project.fruits_ecommerce.securityConfig.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -22,12 +24,6 @@ public class AuthService implements UserDetailsService {
     private final JwtUtil jwtUtil;
     private final RoleRepository roleRepository;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
-        this.roleRepository = roleRepository;
-    }
 
     public String register(RegisterRequest registerRequest) {
         User user = new User();
