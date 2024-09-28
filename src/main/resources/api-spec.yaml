@@ -1,106 +1,49 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: FruitsEcommerce API
-  description: API for managing user authentication and roles for an eCommerce platform.
+  title: Fruits Ecommerce API
   version: 1.0.0
-servers:
-  - url: http://localhost:8080/api/auth
-    description: Local development server
-
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 paths:
-  /register:
+  /api/auth/register:
     post:
       summary: Register a new user
-      operationId: registerUser
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterRequest'
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
       responses:
         '201':
           description: User registered successfully
         '400':
-          description: Bad request, validation errors
-        '409':
-          description: User already exists
-
-  /login:
+          description: Invalid input
+  /api/auth/login:
     post:
-      summary: Login a user and generate JWT token
-      operationId: loginUser
+      summary: Login a user
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
       responses:
         '200':
-          description: Login successful, returns JWT token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
+          description: Login successful and token returned
         '401':
           description: Invalid credentials
-
-components:
-  schemas:
-    RegisterRequest:
-      type: object
-      required:
-        - username
-        - password
-        - email
-        - role
-      properties:
-        username:
-          type: string
-          example: johndoe
-        password:
-          type: string
-          format: password
-          example: P@ssw0rd
-        email:
-          type: string
-          format: email
-          example: johndoe@example.com
-        role:
-          type: string
-          enum: [VISITOR, CLIENT, ADMIN]
-          example: CLIENT
-
-    LoginRequest:
-      type: object
-      required:
-        - username
-        - password
-      properties:
-        username:
-          type: string
-          example: johndoe
-        password:
-          type: string
-          format: password
-          example: P@ssw0rd
-
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          example: "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huZG9lIiwiaWF0IjoxNTk2Mj..."
-        type:
-          type: string
-          example: "Bearer"
-        expiresIn:
-          type: integer
-          example: 86400
-
-securitySchemes:
-  bearerAuth:
-    type: http
-    scheme: bearer
-    bearerFormat: JWT
