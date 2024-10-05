@@ -1,7 +1,8 @@
 package com.project.fruits_ecommerce.entities;
 
-import jakarta.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
