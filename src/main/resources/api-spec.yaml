@@ -12,6 +12,7 @@ paths:
   /api/auth/register:
     post:
       summary: Register a new user
+      operationId: registerUser
       requestBody:
         required: true
         content:
@@ -31,6 +32,7 @@ paths:
   /api/auth/login:
     post:
       summary: Login a user
+      operationId: loginUser
       requestBody:
         required: true
         content:
@@ -47,3 +49,96 @@ paths:
           description: Login successful and token returned
         '401':
           description: Invalid credentials
+  /api/products:
+    get:
+      summary: Retrieve a paginated list of products
+      operationId: listProducts
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: The page number to retrieve (default is 0)
+          schema:
+            type: integer
+            default: 0
+        - name: pageSize
+          in: query
+          required: false
+          description: The number of products to return per page (default is 10)
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: A paginated list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: The ID of the product
+                    name:
+                      type: string
+                      description: The name of the product
+                    unit:
+                      type: string
+                      description: The unit of measurement (e.g., kg, piece)
+                    price:
+                      type: number
+                      format: float
+                      description: The price of the product
+                    description:
+                      type: string
+                      description: A detailed description of the product
+                    imageBase64:
+                      type: string
+                      description: The product image encoded in Base64
+        '401':
+          description: Unauthorized access
+
+    post:
+      summary: Create a new product
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the product
+                unit:
+                  type: string
+                  description: The unit of measurement (e.g., kg, piece)
+                price:
+                  type: number
+                  format: float
+                  description: The price of the product
+                description:
+                  type: string
+                  description: A detailed description of the product
+                imageFile:
+                  type: string
+                  format: binary
+                  description: The image of the product in binary format
+      responses:
+        '201':
+          description: Product added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Product created successfully"
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized access
